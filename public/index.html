@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collaborative Drawing Board</title>
+    <style>
+        body {
+            margin: 0;
+            background: #222;
+            color: #fff;
+            font-family: sans-serif;
+        }
+
+        #board {
+            background: #fff;
+            display: block;
+            margin: 40px auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 16px #0008;
+        }
+
+        #toolbar {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #color {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 style="text-align:center;">Our Drawing Board</h1>
+    <div id="room-controls" style="text-align:center; margin-bottom:20px;">
+        <input type="text" id="room-input" placeholder="Enter room code" maxlength="12"
+            style="padding:8px; width:220px;">
+        <button id="join-btn">Join Room</button>
+        <button id="create-btn">Create Room</button>
+        <span id="room-info" style="margin-left:20px; color:#0f0;"></span>
+    </div>
+    <div id="leave-room-bar" style="display:none; text-align:center; margin-bottom:10px;">
+        <button id="leave-btn" style="padding:8px 16px; font-size:1em;">Leave Room</button>
+    </div>
+    <div id="room-code-display"
+        style="text-align:center; margin-bottom:10px; font-size:1.2em; color:#0f0; display:none;"></div>
+    <canvas id="board" width="800" height="500" style="display:none;"></canvas>
+    <div id="toolbar" style="display:none;">
+        <input type="color" id="color" value="#000000">
+        <label for="color">Pick Color</label>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>
