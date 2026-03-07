@@ -1,4 +1,3 @@
-
 require('dotenv').config();
 const express = require('express');
 const http = require('http');
@@ -30,8 +29,8 @@ const rooms = {};
 // Track room deletion timeouts for grace period
 const roomDeletionTimeouts = {};
 
-// Each room will store an array of drawing actions
-// rooms[roomCode] = { users: Set, history: Array }
+// Each room will store an array of drawing actions and chat messages
+// rooms[roomCode] = { users: Set, history: Array, chat: Array }
 
 io.on('connection', (socket) => {
   // Default: no userId until client registers
@@ -59,11 +58,11 @@ io.on('connection', (socket) => {
       do {
         roomCode = generateRoomCode();
       } while (rooms[roomCode]);
-      rooms[roomCode] = { users: new Set(), history: [] };
+      rooms[roomCode] = { users: new Set(), history: [], chat: [] };
     }
     // Join existing room or create if not exists
     if (!rooms[roomCode]) {
-      rooms[roomCode] = { users: new Set(), history: [] };
+      rooms[roomCode] = { users: new Set(), history: [], chat: [] };
     }
     if (rooms[roomCode].users.size >= 12) {
       socket.emit('roomError', 'Room is full.');
@@ -87,6 +86,8 @@ io.on('connection', (socket) => {
     socket.emit('roomJoined', roomCode);
     // Always send drawing history to the new user (even if empty)
     socket.emit('drawingHistory', rooms[roomCode].history || []);
+    // Always send chat history to the new user (even if empty)
+    socket.emit('chatHistory', rooms[roomCode].chat || []);
     console.log(`Socket ${socket.id} (userId: ${userId}) joined room ${roomCode}`);
   });
 
@@ -100,6 +101,19 @@ io.on('connection', (socket) => {
         if (rooms[room].history.length > 2000) rooms[room].history.shift();
       }
       socket.to(room).emit('drawing', data);
+    }
+  });
+
+  // --- Chat message event ---
+  socket.on('chatMessage', (msg) => {
+    const { room } = msg;
+    if (room && rooms[room]) {
+      // Store chat history in memory
+      if (rooms[room].chat) {
+        rooms[room].chat.push(msg);
+        if (rooms[room].chat.length > 500) rooms[room].chat.shift();
+      }
+      socket.to(room).emit('chatMessage', msg);
     }
   });
 
