@@ -88,6 +88,14 @@ io.on('connection', (socket) => {
     socket.emit('drawingHistory', rooms[roomCode].history || []);
     // Always send chat history to the new user (even if empty)
     socket.emit('chatHistory', rooms[roomCode].chat || []);
+
+    // Notify all clients in the room of the updated user list
+    const userList = Array.from(rooms[roomCode].users);
+    io.to(roomCode).emit('userList', userList);
+
+    // Notify all clients in the room of the join event (except the joining user)
+    socket.to(roomCode).emit('userJoined', { userId, roomCode });
+
     console.log(`Socket ${socket.id} (userId: ${userId}) joined room ${roomCode}`);
   });
 
@@ -127,6 +135,11 @@ io.on('connection', (socket) => {
       } else {
         rooms[roomCode].users.delete(socket.id);
       }
+      // Notify all clients in the room of the updated user list
+      const userList = Array.from(rooms[roomCode].users);
+      io.to(roomCode).emit('userList', userList);
+      // Notify all clients in the room of the leave event
+      socket.to(roomCode).emit('userLeft', { userId, roomCode });
       if (rooms[roomCode].users.size === 0) {
         // Start grace period timer (e.g., 10 seconds)
         if (!roomDeletionTimeouts[roomCode]) {
@@ -152,6 +165,11 @@ io.on('connection', (socket) => {
       } else {
         rooms[roomCode].users.delete(socket.id);
       }
+      // Notify all clients in the room of the updated user list
+      const userList = Array.from(rooms[roomCode].users);
+      io.to(roomCode).emit('userList', userList);
+      // Notify all clients in the room of the leave event
+      socket.to(roomCode).emit('userLeft', { userId, roomCode });
       if (rooms[roomCode].users.size === 0) {
         // Start grace period timer (e.g., 10 seconds)
         if (!roomDeletionTimeouts[roomCode]) {
