@@ -8,7 +8,7 @@ The frontend for this project is no longer maintained in this repository. It is 
 
 [https://romeomadeit.work/drawing-board](https://romeomadeit.work/drawing-board)
 
-If you are looking for the user interface or client-side code, please visit the above link.
+If you are looking for the user interface or client-side code, please contact me directly.
 
 ## Repository Contents
 - `server.js`: The main backend server file. This is the only useful and maintained part of this repository.
