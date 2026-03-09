@@ -8,7 +8,7 @@ The frontend for this project is no longer maintained in this repository. It is 
 
 [https://romeomadeit.work/drawing-board](https://romeomadeit.work/drawing-board)
 
-If you are looking for the user interface or client-side code, please contact me directly.
+If you are looking for the user interface or client-side code, the current frontend implementation is provided in the files `public/drawing-board.tsx` and `public/RoomChat.tsx` within this repository. These files contain the main React components for the drawing board and chat functionality.
 
 ## Repository Contents
 - `server.js`: The main backend server file. This is the only useful and maintained part of this repository.
