@@ -35,12 +35,12 @@ const roomDeletionTimeouts = {};
 io.on('connection', (socket) => {
   // Default: no userId until client registers
   socket.data.userId = undefined;
-  console.log('A user connected:', socket.id);
+  console.log(`[${new Date().toISOString()}] A user connected:`, socket.id);
 
   // Listen for userId registration from client
   socket.on('registerUser', (userId) => {
     socket.data.userId = userId;
-    console.log(`Socket ${socket.id} registered userId: ${userId}`);
+    console.log(`[${new Date().toISOString()}] Socket ${socket.id} registered userId: ${userId}`);
   });
 
   socket.on('joinRoom', (payload) => {
@@ -96,7 +96,7 @@ io.on('connection', (socket) => {
     // Notify all clients in the room of the join event (except the joining user)
     socket.to(roomCode).emit('userJoined', { userId, roomCode });
 
-    console.log(`Socket ${socket.id} (userId: ${userId}) joined room ${roomCode}`);
+    console.log(`[${new Date().toISOString()}] Socket ${socket.id} (userId: ${userId}) joined room ${roomCode}`);
   });
 
   socket.on('drawing', (data) => {
@@ -146,7 +146,7 @@ io.on('connection', (socket) => {
             roomDeletionTimeouts[roomCode] = setTimeout(() => {
               delete rooms[roomCode];
               delete roomDeletionTimeouts[roomCode];
-              console.log(`Room ${roomCode} deleted after 30-minute grace period.`);
+              console.log(`[${new Date().toISOString()}] Room ${roomCode} deleted after 30-minute grace period.`);
             }, 30 * 60 * 1000); // 30 minutes
         }
       }
@@ -176,17 +176,17 @@ io.on('connection', (socket) => {
             roomDeletionTimeouts[roomCode] = setTimeout(() => {
               delete rooms[roomCode];
               delete roomDeletionTimeouts[roomCode];
-              console.log(`Room ${roomCode} deleted after 30-minute grace period.`);
+              console.log(`[${new Date().toISOString()}] Room ${roomCode} deleted after 30-minute grace period.`);
             }, 30 * 60 * 1000); // 30 minutes
         }
       }
     }
-    console.log(`User disconnected: ${socket.id} (userId: ${userId})`);
+    console.log(`[${new Date().toISOString()}] User disconnected: ${socket.id} (userId: ${userId})`);
   });
 });
 
 const PORT = process.env.PORT || 3000;
 const SERVER_URL = process.env.SERVER_URL || `http://localhost:${PORT}`;
 server.listen(PORT, () => {
-  console.log(`Server running on ${SERVER_URL}`);
+  console.log(`[${new Date().toISOString()}] Server running on ${SERVER_URL}`);
 });
