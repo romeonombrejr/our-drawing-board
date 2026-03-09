@@ -141,13 +141,13 @@ io.on('connection', (socket) => {
       // Notify all clients in the room of the leave event
       socket.to(roomCode).emit('userLeft', { userId, roomCode });
       if (rooms[roomCode].users.size === 0) {
-        // Start grace period timer (e.g., 10 seconds)
-        if (!roomDeletionTimeouts[roomCode]) {
-          roomDeletionTimeouts[roomCode] = setTimeout(() => {
-            delete rooms[roomCode];
-            delete roomDeletionTimeouts[roomCode];
-            console.log(`Room ${roomCode} deleted after grace period.`);
-          }, 10000); // 10 seconds
+          // Start grace period timer (30 minutes)
+          if (!roomDeletionTimeouts[roomCode]) {
+            roomDeletionTimeouts[roomCode] = setTimeout(() => {
+              delete rooms[roomCode];
+              delete roomDeletionTimeouts[roomCode];
+              console.log(`Room ${roomCode} deleted after 30-minute grace period.`);
+            }, 30 * 60 * 1000); // 30 minutes
         }
       }
     }
@@ -171,13 +171,13 @@ io.on('connection', (socket) => {
       // Notify all clients in the room of the leave event
       socket.to(roomCode).emit('userLeft', { userId, roomCode });
       if (rooms[roomCode].users.size === 0) {
-        // Start grace period timer (e.g., 10 seconds)
-        if (!roomDeletionTimeouts[roomCode]) {
-          roomDeletionTimeouts[roomCode] = setTimeout(() => {
-            delete rooms[roomCode];
-            delete roomDeletionTimeouts[roomCode];
-            console.log(`Room ${roomCode} deleted after grace period.`);
-          }, 10000); // 10 seconds
+          // Start grace period timer (30 minutes)
+          if (!roomDeletionTimeouts[roomCode]) {
+            roomDeletionTimeouts[roomCode] = setTimeout(() => {
+              delete rooms[roomCode];
+              delete roomDeletionTimeouts[roomCode];
+              console.log(`Room ${roomCode} deleted after 30-minute grace period.`);
+            }, 30 * 60 * 1000); // 30 minutes
         }
       }
     }
